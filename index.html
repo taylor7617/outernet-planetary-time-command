@@ -1,285 +1,637 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="color-scheme" content="dark light" />
-  <title>Outernet Planetary Time Command</title>
-  <style>
-    :root{
-      --bg:#070a10; --panel:#0c1220; --line:rgba(255,255,255,.10);
-      --text:#e9eef7; --muted:rgba(233,238,247,.72); --soft:rgba(233,238,247,.10);
-      --ok:rgba(0,255,136,.85); --warn:rgba(255,209,102,.9);
-      --radius:16px;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    }
-    body{ margin:0; background:radial-gradient(1200px 900px at 20% 10%, #0c1730, var(--bg)); color:var(--text); }
-    header{ padding:18px 16px 8px; }
-    h1{ margin:0; font-size:1.22rem; letter-spacing:.2px; }
-    .sub{ margin-top:8px; color:var(--muted); line-height:1.35; font-size:.98rem; }
-    main{ padding:12px 16px 24px; display:grid; gap:12px; max-width:980px; margin:0 auto; }
-    .panel{ background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
-      border:1px solid var(--line); border-radius:var(--radius); padding:14px; }
-    .row{ display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
-    .tag{ display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border:1px solid var(--line);
-      background:rgba(0,0,0,.18); border-radius:999px; color:var(--muted); font-size:.92rem; }
-    .grid{ display:grid; gap:10px; grid-template-columns:1fr; }
-    @media (min-width:820px){ .grid.two{ grid-template-columns:1.1fr .9fr; } }
-    label span{ display:block; margin-bottom:6px; color:var(--muted); font-size:.92rem; }
-    input{ width:100%; padding:12px; border-radius:14px; border:1px solid var(--line);
-      background:rgba(0,0,0,.22); color:var(--text); font-size:1rem; }
-    button{ width:100%; padding:12px 14px; border-radius:14px; border:1px solid var(--line);
-      background:rgba(255,255,255,.06); color:var(--text); font-size:1rem; }
-    button:active{ transform:translateY(1px); }
-    .muted{ color:var(--muted); }
-    .small{ font-size:.92rem; }
-    .table{ margin-top:10px; border-top:1px solid var(--line); }
-    .trow{ display:grid; grid-template-columns: 1fr auto; gap:12px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,.06); }
-    .trow strong{ font-variant-numeric:tabular-nums; }
-    .pill{ display:inline-flex; padding:6px 10px; border-radius:999px; border:1px solid var(--line); background:rgba(0,0,0,.18); }
-    a{ color:inherit; text-decoration:none; }
-    .btnRow{ display:grid; gap:10px; grid-template-columns:1fr; margin-top:10px; }
-    @media (min-width:820px){ .btnRow{ grid-template-columns:repeat(3,1fr);} }
-    .linkBtn{ display:block; padding:12px; border-radius:14px; border:1px solid var(--line); background:rgba(0,0,0,.18); }
-    .linkBtn .top{ display:flex; justify-content:space-between; gap:8px; align-items:center; }
-    .linkBtn .desc{ margin-top:6px; color:var(--muted); font-size:.92rem; line-height:1.35; }
-    footer{ padding:10px 16px 22px; color:var(--muted); max-width:980px; margin:0 auto; }
-    .ok{ color:var(--ok); }
-    .warn{ color:var(--warn); }
-  </style>
+<meta charset="UTF-8">
+<title>The Diabolical Gift – Planetary Time Engine</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ----------------------------------------------------------
+   FLIGHTLINE THEME — DARK NAVY / CYAN / RUNWAY LIGHTS
+-----------------------------------------------------------*/
+:root {
+  --bg: #020712;
+  --panel: #0a1220;
+  --card: #111c2e;
+  --accent: #00eaff;
+  --accent2: #00ff9c;
+  --muted: #6d7a92;
+  --text: #e2ecf7;
+  --border: rgba(255,255,255,0.10);
+  --glow: 0 0 12px rgba(0,255,255,0.35);
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  margin:0;
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  padding:22px;
+  max-width:900px;
+  margin:auto;
+}
+
+/* ----------------------------------------------------------
+   HEADERS
+-----------------------------------------------------------*/
+h1 {
+  font-size:1.8rem;
+  margin:0 0 16px;
+  text-align:center;
+  color:var(--accent);
+  text-shadow: var(--glow);
+}
+
+h2 {
+  font-size:1.3rem;
+  margin:0 0 12px;
+  color:var(--accent2);
+}
+
+/* ----------------------------------------------------------
+   PANELS
+-----------------------------------------------------------*/
+.panel {
+  background:var(--panel);
+  padding:18px 20px;
+  border-radius:18px;
+  border:1px solid var(--border);
+  margin-bottom:22px;
+  box-shadow:0 0 18px rgba(0,0,0,0.25);
+}
+
+/* ----------------------------------------------------------
+   INPUTS
+-----------------------------------------------------------*/
+input {
+  width:100%;
+  padding:12px 14px;
+  font-size:1rem;
+  margin-top:8px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+}
+
+button {
+  margin-top:12px;
+  width:100%;
+  padding:14px;
+  font-size:1.1rem;
+  background:var(--accent);
+  color:#000;
+  font-weight:bold;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  box-shadow:var(--glow);
+}
+button:hover { filter:brightness(1.1); }
+
+/* ----------------------------------------------------------
+   RESULT CARDS
+-----------------------------------------------------------*/
+.resultCard {
+  padding:14px;
+  background:var(--card);
+  border-radius:14px;
+  border:1px solid var(--border);
+  margin-bottom:10px;
+}
+
+.stepCard {
+  padding:16px;
+  background:var(--card);
+  border-radius:16px;
+  border:1px solid var(--border);
+  margin-bottom:14px;
+}
+
+.stepTop {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:8px;
+}
+
+.stepTitle {
+  font-weight:700;
+  font-size:1.05rem;
+}
+
+.pill {
+  background:var(--accent2);
+  color:#000;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:0.75rem;
+  font-weight:bold;
+}
+
+/* ----------------------------------------------------------
+   COMMAND INTERFACE
+-----------------------------------------------------------*/
+#commandConsole {
+  background:#000;
+  color:var(--accent);
+  padding:18px;
+  border-radius:16px;
+  font-family:monospace;
+  font-size:0.95rem;
+  height:200px;
+  overflow-y:auto;
+  border:1px solid var(--accent);
+}
+
+#commandInput {
+  width:100%;
+  padding:12px;
+  margin-top:8px;
+  font-family:monospace;
+  background:#050f1a;
+  color:var(--accent2);
+  border:1px solid var(--accent);
+  border-radius:12px;
+}
+
+/* ----------------------------------------------------------
+   COSMIC KPI CARDS
+-----------------------------------------------------------*/
+.kpiGrid {
+  display:grid;
+  gap:12px;
+  grid-template-columns:1fr;
+}
+@media (min-width:760px){
+  .kpiGrid { grid-template-columns:repeat(2,1fr); }
+}
+
+.kpi {
+  padding:14px;
+  border-radius:14px;
+  background:var(--card);
+  border:1px solid var(--border);
+}
+
+.kpi .name { font-weight:800; }
+.kpi .meta { color:var(--muted); font-size:0.9rem; margin-top:6px; }
+
+.bar {
+  height:10px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.08);
+  overflow:hidden;
+  margin-top:10px;
+}
+
+.fill {
+  height:100%;
+  background:var(--accent);
+}
+
+.pct {
+  margin-top:6px;
+  font-size:0.85rem;
+  color:var(--accent2);
+}
+
+/* ----------------------------------------------------------
+   SCROLL SECTIONS
+-----------------------------------------------------------*/
+.small { font-size:0.85rem; color:var(--muted); }
+.muted { color:var(--muted); }
+
+/* ----------------------------------------------------------
+   END STYLE
+-----------------------------------------------------------*/
+</style>
 </head>
-
 <body>
-  <header>
-    <h1>Outernet Planetary Time Command</h1>
-    <div class="sub">
-      A calm command-board showing how time behaves across the solar system.
-      <span class="pill">No tracking</span> <span class="pill">UTC-anchored</span> <span class="pill">Physics-first</span>
+<main>
+
+<h1>🛫 The Diabolical Gift — Planetary Time Engine</h1>
+<p class="small" style="text-align:center;">
+A FlightLine Outernet Clock • Planetary • Solar • Galactic • Command-Driven
+</p>
+
+<!-- ======================================================
+     COMMAND CONSOLE — USER TYPES COMMANDS LIKE A TERMINAL
+======================================================= -->
+<section class="panel">
+  <h2>FlightLine Command Console</h2>
+  <div id="commandConsole">
+    [SYSTEM READY] Type <strong>help</strong> for available commands.<br>
+  </div>
+  <input id="commandInput" type="text" placeholder="Enter command… e.g., planet age, solar cycles, galactic time">
+</section>
+
+
+<!-- ======================================================
+     SECTION: BIRTHDATE INPUT
+======================================================= -->
+<section class="panel">
+  <h2>Your Earth Birthdate</h2>
+  <p class="small">Used to compute planetary ages and alignment windows.</p>
+
+  <input id="birthInput" type="date">
+  <button id="calcBtn">Calculate Planetary Profile</button>
+
+  <div id="earthAgeCard" class="resultCard" style="display:none;">
+    <strong>Earth Age:</strong>
+    <div id="earthAgeVal"></div>
+  </div>
+</section>
+
+
+<!-- ======================================================
+     SECTION: PLANETARY RESULTS
+======================================================= -->
+<section class="panel" id="planetaryPanel" style="display:none;">
+  <h2>Planetary Ages & Birthdays</h2>
+  <div id="planetaryResults"></div>
+</section>
+
+
+<!-- ======================================================
+     CELEBRATION + ALIGNMENT PANEL
+======================================================= -->
+<section class="panel" id="dailyActionPanel" style="display:none;">
+  <h2>Today’s Planetary Alignment</h2>
+  <p class="muted small">Based on your nearest upcoming planetary birthday.</p>
+
+  <div id="dailyActionCard" class="stepCard">
+    <div class="stepTop">
+      <div class="stepTitle" id="dailyPlanet">—</div>
+      <span class="pill" id="dailyPct">—</span>
     </div>
-  </header>
 
-  <main>
-    <section class="panel">
-      <div class="row">
-        <div class="tag">🕰️ Earth UTC (Zulu): <strong id="utcNow">—</strong></div>
-        <div class="tag">🔁 Snapshot refresh: <strong id="refreshRate">60</strong>s</div>
-      </div>
-      <p class="muted small" style="margin:10px 0 0;">
-        This system records motion and reality. It does not “invent” hours where physics doesn’t support them.
-      </p>
-    </section>
+    <div class="stepMeta" id="dailyWhy">—</div>
 
-    <section class="panel">
-      <h2 style="margin:0 0 8px; font-size:1.05rem;">Planetary Age + Planet Birthdays</h2>
-      <div class="grid two">
-        <div>
-          <label>
-            <span>Birthdate (recommended)</span>
-            <input id="birthdate" type="date" />
-          </label>
-          <p class="muted small" style="margin:8px 0 0;">
-            We compute Earth age from your birthdate in UTC to avoid timezone edge cases.
-          </p>
-        </div>
-        <div>
-          <label>
-            <span>OR Earth age (quick mode)</span>
-            <input id="earthAge" inputmode="decimal" type="number" min="0" step="0.01" placeholder="e.g., 27.5" />
-          </label>
-          <button id="calc">Calculate</button>
-          <p class="muted small" style="margin:8px 0 0;">
-            Output includes: planetary age (in that planet’s years) + next “planet birthday” date (Earth UTC).
-          </p>
-        </div>
-      </div>
+    <div class="commandMsg" id="dailyAction">—</div>
 
-      <div id="results" class="table" aria-live="polite"></div>
-    </section>
+    <div class="commandMeta" id="dailyMeta">
+      UTC anchored • Reflective protocol • Not predictive
+    </div>
+  </div>
+</section>
 
-    <section class="panel" id="keysPanel">
-      <h2 style="margin:0 0 8px; font-size:1.05rem;">Three External Navigation Keys</h2>
-      <p class="muted small" style="margin:0 0 10px;">
-        FlightLine does not embed these systems. It routes to them cleanly to keep sovereignty and reduce dependency risk.
-        <span id="keysStatus" class="pill">—</span>
-      </p>
 
-      <div class="btnRow" id="keysButtons" hidden>
-        <a class="linkBtn" href="https://eyes.nasa.gov/" target="_blank" rel="noopener noreferrer">
-          <div class="top"><strong>NASA Eyes</strong><span class="pill">Live navigation</span></div>
-          <div class="desc">Orbital mechanics, planet positions, spacecraft context. Mission-grade reference.</div>
-        </a>
-        <a class="linkBtn" href="https://stellarium-web.org/" target="_blank" rel="noopener noreferrer">
-          <div class="top"><strong>Stellarium Web</strong><span class="pill">Observation</span></div>
-          <div class="desc">See planetary position from Earth’s sky. Visual grounding for the public.</div>
-        </a>
-        <a class="linkBtn" href="https://trek.nasa.gov/" target="_blank" rel="noopener noreferrer">
-          <div class="top"><strong>NASA Trek</strong><span class="pill">Surface truth</span></div>
-          <div class="desc">Planetary surface mapping portals. Closest public equivalent to “maps for worlds.”</div>
-        </a>
-      </div>
+<!-- ======================================================
+     SOLAR + GALACTIC CYCLES PANEL
+======================================================= -->
+<section class="panel" id="cosmicCyclesPanel" style="display:none;">
+  <h2>Cosmic Cycles</h2>
+  <p class="muted small">Solar → Earth System → Galactic time progression (UTC snapshot).</p>
 
-      <p class="muted small" style="margin:10px 0 0;">
-        If you want these locked until a specific date, change the <code>KEYS_UNLOCK_UTC</code> constant in the script.
-      </p>
-    </section>
-  </main>
+  <div id="cosmicCyclesTable"></div>
+</section>
 
-  <footer class="small">
-    <div>Outernet Doctrine: <span class="ok">Circulation is value.</span> If it doesn’t move, it doesn’t exist.</div>
-    <div class="muted" style="margin-top:6px;">This page stores nothing. All calculations happen on your device.</div>
-  </footer>
 
+</main>
 <script>
-(() => {
-  "use strict";
+// =========================================================
+//  CONSTANTS
+// =========================================================
+const MS_PER_DAY = 86400000;
 
-  // ======= CONFIG =======
-  const SNAPSHOT_REFRESH_SECONDS = 60;
+// Orbital periods in Earth years (approx)
+const ORBITAL = [
+  { name:"Mercury", years:0.2408467 },
+  { name:"Venus",   years:0.61519726 },
+  { name:"Earth",   years:1.0 },
+  { name:"Mars",    years:1.8808158 },
+  { name:"Jupiter", years:11.862615 },
+  { name:"Saturn",  years:29.447498 },
+  { name:"Uranus",  years:84.016846 },
+  { name:"Neptune", years:164.79132 }
+];
 
-  // Unlock the external keys on Jan 1 (UTC). Change as needed.
-  const KEYS_UNLOCK_UTC = Date.UTC(2026, 0, 1, 0, 0, 0); // 2026-01-01T00:00:00Z
-
-  // Orbital periods in Earth years (approx; stable, widely used)
-  const ORBITAL = [
-    { name: "Mercury", years: 0.2408467 },
-    { name: "Venus",   years: 0.61519726 },
-    { name: "Earth",   years: 1.0 },
-    { name: "Mars",    years: 1.8808158 },
-    { name: "Jupiter", years: 11.862615 },
-    { name: "Saturn",  years: 29.447498 },
-    { name: "Uranus",  years: 84.016846 },
-    { name: "Neptune", years: 164.79132 }
-  ];
-
-  // Use mean tropical year for Earth-year conversion
-  const EARTH_YEAR_DAYS = 365.2425;
-  const MS_PER_DAY = 86400000;
-
-  // ======= UI HOOKS =======
-  const utcNowEl = document.getElementById("utcNow");
-  const refreshRateEl = document.getElementById("refreshRate");
-  const birthEl = document.getElementById("birthdate");
-  const ageEl = document.getElementById("earthAge");
-  const btn = document.getElementById("calc");
-  const resultsEl = document.getElementById("results");
-
-  const keysStatusEl = document.getElementById("keysStatus");
-  const keysButtonsEl = document.getElementById("keysButtons");
-
-  refreshRateEl.textContent = String(SNAPSHOT_REFRESH_SECONDS);
-
-  // ======= TIME DISPLAY =======
-  function fmtUTC(ms){
-    const d = new Date(ms);
-    // Safari safe: toISOString exists, but keep readable:
-    return d.toISOString().replace("T"," ").replace(".000Z","Z");
+// =========================================================
+//  CELEBRATION PROTOCOLS
+// =========================================================
+const CELEBRATIONS = {
+  Mercury:{
+    title:"Clarity Cycle",
+    why:"Mercury completes its year quickly — signaling precision and mental sharpness.",
+    action:"Reduce cognitive noise. Set one clear intention. Clean one thread."
+  },
+  Venus:{
+    title:"Harmony Cycle",
+    why:"Venus marks rhythm, balance, and sensory coherence.",
+    action:"Slow down. Appreciate beauty. Offer gratitude to one person."
+  },
+  Earth:{
+    title:"Integration Cycle",
+    why:"Earth frames the baseline reality of seasons and return.",
+    action:"Walk outdoors. Observe light, temperature, and motion."
+  },
+  Mars:{
+    title:"Momentum Cycle",
+    why:"Mars marks discipline, force-with-control, and decisive motion.",
+    action:"Complete a difficult task. Move your body intentionally."
+  },
+  Jupiter:{
+    title:"Expansion Cycle",
+    why:"Jupiter rewards patience, wisdom, and long study arcs.",
+    action:"Learn something new today. Teach it to someone else."
+  },
+  Saturn:{
+    title:"Structure Cycle",
+    why:"Saturn draws lines, sets boundaries, and clarifies responsibility.",
+    action:"Organize one system. Reduce excess. Reinforce one boundary."
+  },
+  Uranus:{
+    title:"Innovation Cycle",
+    why:"Uranus pushes controlled disruption and unconventional insight.",
+    action:"Break one routine. Try an unusual idea or method."
+  },
+  Neptune:{
+    title:"Reflection Cycle",
+    why:"Neptune emphasizes inner clarity, calm, and imagination.",
+    action:"Sit in silence. Visualize your next state without pressure."
   }
-  function tickUTC(){
-    utcNowEl.textContent = fmtUTC(Date.now());
-  }
+};
 
-  // ======= KEY UNLOCK =======
-  function updateKeys(){
-    const now = Date.now();
-    if (now >= KEYS_UNLOCK_UTC){
-      keysStatusEl.textContent = "UNLOCKED";
-      keysButtonsEl.hidden = false;
-    } else {
-      keysStatusEl.textContent = "LOCKED UNTIL JAN 1 (UTC)";
-      keysButtonsEl.hidden = true;
-    }
-  }
+// =========================================================
+//  AGE CALC
+// =========================================================
+function computeEarthAge(birthUTC){
+  const now = Date.now();
+  return (now - birthUTC) / (MS_PER_DAY * 365.2425);
+}
 
-  // ======= AGE CALC =======
-  function earthAgeFromBirthdate(dateStr){
-    if (!dateStr) return null;
-    const parts = dateStr.split("-").map(Number);
-    if (parts.length !== 3) return null;
-    const [y,m,d] = parts;
-    if (!y || !m || !d) return null;
-    const birthUTC = Date.UTC(y, m-1, d);
-    const ms = Date.now() - birthUTC;
-    if (ms < 0) return null;
-    const days = ms / MS_PER_DAY;
-    return days / EARTH_YEAR_DAYS;
-  }
+function computePlanetaryAges(earthAge){
+  return ORBITAL.map(p=>{
+    const raw = earthAge / p.years;
+    const full = Math.floor(raw);
+    const pct = (raw - full) * 100;
+    const remain = 100 - pct;
+    return { planet:p.name, fullYears:full, pct, remaining:remain };
+  });
+}
 
-  function clampAge(n){
-    return Number.isFinite(n) && n >= 0 ? n : null;
-  }
-
-  function fmtNum(n, decimals=2){
-    if (!Number.isFinite(n)) return "—";
-    return n.toFixed(decimals);
-  }
-
-  // Next whole-number planet "birthday":
-  // Find next integer N > currentPlanetAge; solve for EarthAgeNeeded = N * orbitalYears
-  // Convert EarthAgeNeeded into a date using birthdate (if provided); else show "requires birthdate".
-  function nextPlanetBirthday(planetYears, earthAge, birthUTC){
-    const current = earthAge / planetYears;
-    const nextInt = Math.floor(current) + 1;
-    const earthAgeNeeded = nextInt * planetYears;              // in Earth years
-    const deltaYears = earthAgeNeeded - earthAge;              // Earth years from now
-    const deltaDays = deltaYears * EARTH_YEAR_DAYS;
-    const targetMs = Date.now() + (deltaDays * MS_PER_DAY);
-    if (birthUTC == null) return { nextInt, dateStr: "Add birthdate for date" };
-    // Better: compute from birthUTC (more stable):
-    const targetFromBirth = birthUTC + (earthAgeNeeded * EARTH_YEAR_DAYS * MS_PER_DAY);
-    return { nextInt, dateStr: fmtUTC(targetFromBirth) };
-  }
-
-  function render(earthAge, birthUTC){
-    const rows = ORBITAL.map(p => {
-      const pAge = earthAge / p.years;
-      const next = nextPlanetBirthday(p.years, earthAge, birthUTC);
-      return `
-        <div class="trow">
-          <div>
-            <div><strong>${p.name}</strong> <span class="muted">(${fmtNum(p.years, 6)} Earth years / planet year)</span></div>
-            <div class="muted small">Your age: <strong>${fmtNum(pAge, 2)}</strong> ${p.name} years</div>
-            <div class="muted small">Next ${p.name} birthday: <strong>${next.nextInt}</strong> ${p.name} years → <span class="pill">${next.dateStr}</span></div>
-          </div>
-          <div class="pill">${fmtNum((pAge % 1) * 100, 2)}% to next</div>
-        </div>
-      `;
-    }).join("");
-
-    resultsEl.innerHTML = `
-      <div class="trow">
-        <div>
-          <div><strong>Earth age used:</strong> <span class="pill">${fmtNum(earthAge, 4)} years</span></div>
-          <div class="muted small">Calculated locally. No data is saved.</div>
-        </div>
-        <div class="pill">UTC anchored</div>
+// =========================================================
+//  RENDER PLANETARY AGE TABLE
+// =========================================================
+function renderPlanetaryResults(ages){
+  const box = document.getElementById("planetaryResults");
+  let html = "";
+  ages.forEach(a=>{
+    html += `
+      <div class="resultCard">
+        <strong>${a.planet}</strong><br>
+        ${a.fullYears.toFixed(0)} planetary years<br>
+        <span class="pill">${a.pct.toFixed(2)}% through current year</span>
       </div>
-      ${rows}
     `;
-  }
+  });
+  box.innerHTML = html;
+}
 
-  btn.addEventListener("click", () => {
-    const typed = clampAge(parseFloat(ageEl.value));
-    const fromBirth = earthAgeFromBirthdate(birthEl.value);
-    const earthAge = typed !== null ? typed : fromBirth;
+// =========================================================
+//  DAILY ALIGNMENT ENGINE
+// =========================================================
+function computeDailyAlignment(earthAge){
+  if (!earthAge) return null;
 
-    let birthUTC = null;
-    if (birthEl.value){
-      const [y,m,d] = birthEl.value.split("-").map(Number);
-      if (y && m && d) birthUTC = Date.UTC(y, m-1, d);
+  let best = null;
+  ORBITAL.forEach(p=>{
+    const pAge = earthAge / p.years;
+    const pct = (pAge % 1) * 100;
+    const remain = 100 - pct;
+    if (!best || remain < best.remaining){
+      best = { planet:p.name, pct, remaining:remain };
     }
-
-    if (earthAge === null){
-      resultsEl.innerHTML = `<div class="trow"><div class="muted">Enter a valid birthdate or Earth age.</div><div class="pill warn">INPUT NEEDED</div></div>`;
-      return;
-    }
-    render(earthAge, birthUTC);
   });
 
-  // init
-  tickUTC();
-  updateKeys();
-  setInterval(() => { tickUTC(); updateKeys(); }, SNAPSHOT_REFRESH_SECONDS * 1000);
-})();
+  const proto = CELEBRATIONS[best.planet];
+  if (!proto) return null;
+
+  return {
+    planet:best.planet,
+    pctToNext:best.remaining,
+    title:proto.title,
+    why:proto.why,
+    action:proto.action
+  };
+}
+
+function renderDailyAction(earthAge){
+  const panel = document.getElementById("dailyActionPanel");
+  const card  = document.getElementById("dailyActionCard");
+  if (!earthAge){
+    panel.style.display="none";
+    return;
+  }
+  panel.style.display="block";
+
+  const d = computeDailyAlignment(earthAge);
+
+  document.getElementById("dailyPlanet").textContent =
+    `${d.planet} — ${d.title}`;
+
+  document.getElementById("dailyPct").textContent =
+    `${d.pctToNext.toFixed(2)}% to next birthday`;
+
+  document.getElementById("dailyWhy").textContent = d.why;
+
+  document.getElementById("dailyAction").innerHTML =
+    `<strong>Today’s Action:</strong><br>${d.action}`;
+}
+
+// =========================================================
+//  COSMIC CYCLES (SOLAR + EARTH SYSTEM + GALACTIC)
+// =========================================================
+const COSMIC_CYCLES = [
+  // ----- SOLAR -----
+  {
+    group:"Solar",
+    name:"Solar Rotation",
+    anchor_utc: Date.UTC(2000,0,1,0,0,0),
+    period_days:27.2753,
+    note:"Approximate Carrington-like rotation."
+  },
+  {
+    group:"Solar",
+    name:"Solar Activity Cycle",
+    anchor_utc: Date.UTC(2000,0,1,0,0,0),
+    period_days:11 * 365.2425,
+    note:"~11-year magnetic activity cycle."
+  },
+
+  // ----- EARTH SYSTEM -----
+  {
+    group:"Earth System",
+    name:"Earth Day",
+    anchor_utc: Date.UTC(2000,0,1,0,0,0),
+    period_days:1,
+    note:"Earth’s rotation period (solar day)."
+  },
+  {
+    group:"Earth System",
+    name:"Tropical Year",
+    anchor_utc: Date.UTC(2000,0,1,0,0,0),
+    period_days:365.2425,
+    note:"Seasonal year length."
+  },
+
+  // ----- EARTH LONG CYCLES -----
+  {
+    group:"Earth System",
+    name:"Axial Precession",
+    anchor_utc: Date.UTC(2000,0,1,0,0,0),
+    period_days:25772 * 365.2425,
+    note:"~25,772-year wobble (approx)."
+  },
+
+  // ----- GALACTIC -----
+  {
+    group:"Galactic",
+    name:"Galactic Year",
+    anchor_utc: Date.UTC(2000,0,1,0,0,0),
+    period_days:230_000_000 * 365.2425,
+    note:"Sun’s orbit around Milky Way (~230M yrs)."
+  }
+];
+
+function pctThroughCycle(nowMs, anchorMs, periodDays){
+  const periodMs = periodDays * MS_PER_DAY;
+  let delta = (nowMs - anchorMs) % periodMs;
+  if (delta < 0) delta += periodMs;
+  return (delta / periodMs) * 100;
+}
+
+function fmtPeriod(days){
+  if (days < 2) return `${days.toFixed(3)} days`;
+  if (days < 500) return `${days.toFixed(2)} days`;
+  const yrs = days/365.2425;
+  if (yrs < 2000) return `${yrs.toFixed(2)} years`;
+  if (yrs < 1000000) return `${(yrs/1000).toFixed(2)}k years`;
+  if (yrs < 1000000000) return `${(yrs/1000000).toFixed(2)}M years`;
+  return `${(yrs/1e9).toFixed(2)}B years`;
+}
+
+function renderCosmicCycles(birthUTC){
+  const panel = document.getElementById("cosmicCyclesPanel");
+  panel.style.display="block";
+
+  const table = document.getElementById("cosmicCyclesTable");
+  const now = Date.now();
+
+  const cards = COSMIC_CYCLES.map(c=>{
+    const pct = pctThroughCycle(now, c.anchor_utc, c.period_days);
+    const personal = birthUTC
+      ? ((now - birthUTC) / (c.period_days * MS_PER_DAY)).toFixed(4)
+      : null;
+
+    return `
+      <div class="kpi">
+        <div class="name">${c.group} • ${c.name}</div>
+        <div class="meta">Period: <strong>${fmtPeriod(c.period_days)}</strong></div>
+        <div class="meta">${c.note}</div>
+        <div class="meta">
+          Personal cycles since birth:
+          <strong>${personal ?? "Add birthdate"}</strong>
+        </div>
+        <div class="bar"><div class="fill" style="width:${pct.toFixed(2)}%"></div></div>
+        <div class="pct">${pct.toFixed(2)}% through current cycle</div>
+      </div>
+    `;
+  }).join("");
+
+  table.innerHTML = `<div class="kpiGrid">${cards}</div>`;
+}
+
+// =========================================================
+//  COMMAND SYSTEM
+// =========================================================
+function pushConsole(msg, color="var(--accent)"){
+  const con = document.getElementById("commandConsole");
+  con.innerHTML += `<span style="color:${color};">${msg}</span><br>`;
+  con.scrollTop = con.scrollHeight;
+}
+
+function runCommand(txt){
+  const cmd = txt.trim().toLowerCase();
+
+  if (cmd === "help"){
+    pushConsole("[COMMANDS] planet age, solar cycles, galactic time, scroll top, scroll bottom");
+    return;
+  }
+  if (cmd === "planet age"){
+    document.getElementById("planetaryPanel").scrollIntoView({behavior:"smooth"});
+    pushConsole("[NAV] Moved to planetary section.");
+    return;
+  }
+  if (cmd === "solar cycles"){
+    document.getElementById("cosmicCyclesPanel").scrollIntoView({behavior:"smooth"});
+    pushConsole("[NAV] Solar + Earth cycle panel.");
+    return;
+  }
+  if (cmd === "galactic time"){
+    document.getElementById("cosmicCyclesPanel").scrollIntoView({behavior:"smooth"});
+    pushConsole("[NAV] Galactic cycle panel.");
+    return;
+  }
+  if (cmd === "scroll top"){
+    window.scrollTo({top:0, behavior:"smooth"});
+    pushConsole("[NAV] Scrolling to top.");
+    return;
+  }
+  if (cmd === "scroll bottom"){
+    window.scrollTo({top:document.body.scrollHeight, behavior:"smooth"});
+    pushConsole("[NAV] Scrolling to bottom.");
+    return;
+  }
+
+  pushConsole("[ERROR] Unknown command. Type help.");
+}
+
+// =========================================================
+//  MAIN CALCULATION HANDLER
+// =========================================================
+document.getElementById("calcBtn").onclick = ()=>{
+  const birthStr = document.getElementById("birthInput").value;
+  if (!birthStr){
+    alert("Enter your birthdate.");
+    return;
+  }
+
+  const [y,m,d] = birthStr.split("-").map(Number);
+  const birthUTC = Date.UTC(y,m-1,d);
+
+  const earthAge = computeEarthAge(birthUTC);
+  document.getElementById("earthAgeCard").style.display="block";
+  document.getElementById("earthAgeVal").textContent =
+    earthAge.toFixed(6) + " Earth years";
+
+  // Planetary ages
+  const ages = computePlanetaryAges(earthAge);
+  document.getElementById("planetaryPanel").style.display="block";
+  renderPlanetaryResults(ages);
+
+  // Alignment
+  renderDailyAction(earthAge);
+
+  // Cosmic engine
+  renderCosmicCycles(birthUTC);
+};
+
+// =========================================================
+//  COMMAND INPUT LISTENER
+// =========================================================
+document.getElementById("commandInput").addEventListener("keydown", e=>{
+  if (e.key === "Enter"){
+    const val = e.target.value;
+    pushConsole("> " + val, "var(--accent2)");
+    runCommand(val);
+    e.target.value = "";
+  }
+});
 </script>
-</body>
-</html>
