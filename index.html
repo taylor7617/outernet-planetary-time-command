@@ -1,138 +1,167 @@
-<!-- ======================================================
-     DESTINY CLOCK PANEL (HIDDEN UNTIL COMMAND)
-======================================================= -->
-<section class="cosmicPanel" id="destinyClockPanel" style="display:none;">
-  <h2>🜂 FlightLine Destiny Clock</h2>
-  <p class="small muted">
-    Sovereign cosmic briefing. Activated by command.<br>
-    (Planetary → Solar → Galactic → Alignment → Law)
-  </p>
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<title>The Diabolical Gift — Outernet Planetary Time Command</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <!-- Planetary Countdown -->
-  <div class="stepCard">
-    <div class="stepTitle">Planetary Countdown</div>
-    <div id="destinyPlanetary" class="muted"></div>
-  </div>
+<style>
+:root{
+--bg:#020712;--panel:#0a1220;--card:#111c2e;
+--a1:#00eaff;--a2:#00ff9c;--mut:#6d7a92;--txt:#e2ecf7;
+--bdr:rgba(255,255,255,0.10);--gl:0 0 12px rgba(0,255,255,.35);
+--cosmic-bg:radial-gradient(circle at 50% 0%,#2b0038,#070012 60%,#000 95%);
+--cosmic-panel:rgba(15,0,35,.55);--cosmic-bdr:rgba(255,255,255,.12);
+--cosmic-glow:0 0 18px rgba(173,0,255,.45);
+--f:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
+body{margin:0;font-family:var(--f);background:var(--bg);color:var(--txt);}
+main{padding:22px;max-width:900px;margin:auto;}
+h1{text-align:center;font-size:1.8rem;color:var(--a1);text-shadow:var(--gl);}
+h2{font-size:1.2rem;color:var(--a2);margin:0 0 10px;}
+.panel{background:var(--panel);padding:18px;border-radius:16px;border:1px solid var(--bdr);margin-bottom:20px;}
+.cosmicPanel{background:var(--cosmic-panel);padding:20px;border-radius:18px;border:1px solid var(--cosmic-bdr);box-shadow:var(--cosmic-glow);backdrop-filter:blur(6px);margin-bottom:20px;}
+input,button{width:100%;padding:12px;border-radius:12px;border:1px solid var(--bdr);}
+input{background:var(--card);color:var(--txt);}
+button{background:var(--a1);color:#000;font-weight:700;margin-top:10px;box-shadow:var(--gl);}
+.resultCard,.stepCard{padding:14px;background:var(--card);border-radius:14px;border:1px solid var(--bdr);margin-bottom:10px;}
+.pill{background:var(--a2);color:#000;padding:4px 10px;border-radius:50px;font-size:.75rem;font-weight:700;}
+.small{font-size:.85rem;color:var(--mut);}
+.muted{color:var(--mut);}
+#commandConsole{background:#000;color:var(--a1);padding:16px;height:180px;overflow-y:auto;border-radius:14px;font-family:monospace;border:1px solid var(--a1);}
+#commandInput{background:#050f1a;color:var(--a2);margin-top:8px;}
+</style>
+</head>
 
-  <!-- Solar Position -->
-  <div class="stepCard">
-    <div class="stepTitle">Solar Position</div>
-    <div id="destinySolar" class="muted"></div>
-  </div>
+<body><main>
 
-  <!-- Galactic Position -->
-  <div class="stepCard">
-    <div class="stepTitle">Galactic Position</div>
-    <div id="destinyGalactic" class="muted"></div>
-  </div>
+<h1>🛫 The Diabolical Gift — Planetary Time Engine</h1>
+<p class="small" style="text-align:center;">A FlightLine Outernet Clock • Planetary • Solar • Galactic</p>
 
-  <!-- Daily Alignment -->
-  <div class="stepCard">
-    <div class="stepTitle">Daily Alignment Protocol</div>
-    <div id="destinyAlignment" class="muted"></div>
-  </div>
-
-  <!-- Closing Law -->
-  <div class="stepCard" style="border-color:var(--runway-accent2);">
-    <div class="stepTitle" style="color:var(--runway-accent2);">Closing Law</div>
-    <div id="destinyLaw" class="muted"></div>
-  </div>
+<section class="panel">
+<h2>FlightLine Command Console</h2>
+<div id="commandConsole">[SYSTEM READY] Type <b>help</b> for commands.<br></div>
+<input id="commandInput" placeholder="Enter command… e.g., destiny clock">
 </section>
 
+<section class="panel">
+<h2>Your Earth Birthdate</h2>
+<input id="birthInput" type="date">
+<button id="calcBtn">Calculate</button>
+<div id="earthAgeCard" class="resultCard" style="display:none;">
+<b>Earth Age:</b> <span id="earthAgeVal"></span>
+</div>
+</section>
+
+<section class="panel" id="planetaryPanel" style="display:none;">
+<h2>Planetary Ages & Birthdays</h2>
+<div id="planetaryResults"></div>
+</section>
+
+<section class="panel" id="dailyActionPanel" style="display:none;">
+<h2>Today’s Planetary Alignment</h2>
+<div id="dailyActionCard" class="stepCard">
+<div class="stepTitle" id="dailyPlanet"></div>
+<span class="pill" id="dailyPct"></span>
+<div id="dailyWhy" class="muted"></div>
+<div id="dailyAction"></div>
+</div>
+</section>
+
+<section class="panel" id="cosmicCyclesPanel" style="display:none;">
+<h2>Cosmic Cycles</h2>
+<div id="cosmicCyclesTable"></div>
+</section>
+
+<section class="cosmicPanel" id="destinyClockPanel" style="display:none;">
+<h2>🜂 FlightLine Destiny Clock</h2>
+<div class="stepCard"><div class="stepTitle">Planetary Countdown</div><div id="destinyPlanetary" class="muted"></div></div>
+<div class="stepCard"><div class="stepTitle">Solar Position</div><div id="destinySolar" class="muted"></div></div>
+<div class="stepCard"><div class="stepTitle">Galactic Position</div><div id="destinyGalactic" class="muted"></div></div>
+<div class="stepCard"><div class="stepTitle">Daily Alignment</div><div id="destinyAlignment" class="muted"></div></div>
+<div class="stepCard" style="border-color:var(--a2);"><div class="stepTitle" style="color:var(--a2);">Closing Law</div><div id="destinyLaw" class="muted"></div></div>
+</section>
 
 <script>
-/* =========================================================
-   BLOCK 4 — CLOSING LAW SENTENCE ENGINE
-========================================================= */
-function generateClosingLaw(planet, solarPct, galacticPct){
-  const LAWS = [
-    `${planet} frames the motion; remain steady.`,
-    `When the solar field shifts, adjust without resistance.`,
-    `Galactic drift is slow, but direction is absolute.`,
-    `Return to alignment before initiating force.`,
-    `A cycle completed is a responsibility renewed.`,
-    `Position decides outcome more than pressure.`,
-    `Move only when the signal and the season match.`,
-    `Silence is a vector; clarity is a tool.`,
-    `Trajectory determines destiny; refine the arc.`,
-    `Nothing accelerates fate like disciplined stillness.`
-  ];
+const MS=86400000;
+const ORB=[["Mercury",0.2408467],["Venus",0.61519726],["Earth",1],["Mars",1.8808158],["Jupiter",11.862615],["Saturn",29.447498],["Uranus",84.016846],["Neptune",164.79132]];
+const CE={Mercury:"Clarity Cycle",Venus:"Harmony Cycle",Earth:"Integration Cycle",Mars:"Momentum Cycle",Jupiter:"Expansion Cycle",Saturn:"Structure Cycle",Uranus:"Innovation Cycle",Neptune:"Reflection Cycle"};
+const ACT={Mercury:"Simplify one thought.",Venus:"Add beauty.",Earth:"Anchor outdoors.",Mars:"Complete one task.",Jupiter:"Learn something new.",Saturn:"Organize one system.",Uranus:"Try a new angle.",Neptune:"Sit in silence."};
+const CYC=[{a:Date.UTC(2000,0,1),p:27.2753},{a:Date.UTC(2000,0,1),p:11*365.2425},{a:Date.UTC(2000,0,1),p:1},{a:Date.UTC(2000,0,1),p:365.2425},{a:Date.UTC(2000,0,1),p:25772*365.2425},{a:Date.UTC(2000,0,1),p:230000000*365.2425}];
 
-  const idx = Math.floor((solarPct + galacticPct) % LAWS.length);
-  return LAWS[idx];
+const pct=(n,a,p)=>(((n-a)% (p*MS)+p*MS)%(p*MS))/(p*MS)*100;
+const eAge=b=>(Date.now()-b)/(MS*365.2425);
+const pAges=e=>ORB.map(x=>{let r=e/x[1],f=Math.floor(r),p=(r-f)*100;return{name:x[0],full:f,pct:p,rem:100-p}});
+
+function renderPA(a){
+planetaryPanel.style.display="block";
+planetaryResults.innerHTML=a.map(x=>`<div class='resultCard'><b>${x.name}</b><br>${x.full} yrs<br><span class='pill'>${x.pct.toFixed(2)}%</span></div>`).join("");
 }
 
-/* =========================================================
-   BLOCK 5 — DESTINY CLOCK RENDER ENGINE (FINAL, CLEAN)
-========================================================= */
-function renderDestinyClock(birthUTC){
-  const panel = document.getElementById("destinyClockPanel");
-  panel.style.display = "block";
-
-  const age = computeEarthAge(birthUTC);
-  const planets = computePlanetaryAges(age);
-
-  // Nearest planetary birthday
-  const next = planets.reduce((a,b)=> a.remaining < b.remaining ? a : b);
-
-  document.getElementById("destinyPlanetary").innerHTML =
-    `${next.planet} → ${next.remaining.toFixed(2)}% until reset`;
-
-  // Solar rotation + activity
-  const now = Date.now();
-  const solarRot = pctThroughCycle(now, COSMIC_CYCLES[0].anchor_utc, COSMIC_CYCLES[0].period_days);
-  const solarAct = pctThroughCycle(now, COSMIC_CYCLES[1].anchor_utc, COSMIC_CYCLES[1].period_days);
-
-  document.getElementById("destinySolar").innerHTML =
-    `Rotation: ${solarRot.toFixed(2)}%<br>
-     Activity Cycle: ${solarAct.toFixed(2)}%`;
-
-  // Galactic position
-  const gal = pctThroughCycle(now, COSMIC_CYCLES[5].anchor_utc, COSMIC_CYCLES[5].period_days);
-  document.getElementById("destinyGalactic").innerHTML =
-    `${gal.toFixed(6)}% through galactic orbit`;
-
-  // Daily alignment
-  const align = computeDailyAlignment(age);
-  document.getElementById("destinyAlignment").innerHTML =
-    `${align.planet} → ${align.title}<br>${align.action}`;
-
-  // Closing law sentence
-  const law = generateClosingLaw(align.planet, solarAct, gal);
-  document.getElementById("destinyLaw").innerHTML = law;
+function daily(e){
+let b=null;
+ORB.forEach(x=>{let r=e/x[1],pc=(r%1)*100,rm=100-pc;if(!b||rm<b.rm)b={pl:x[0],pc,rm}});
+return{pl:b.pl,rm:b.rm,cy:CE[b.pl],ac:ACT[b.pl]};
 }
 
-/* =========================================================
-   COMMAND HANDLER EXTENSION (DESTINY CLOCK)
-========================================================= */
-function handleDestinyClockCommand(cmd){
-  if(cmd !== "destiny clock") return false;
-
-  const birthStr = document.getElementById("birthInput").value;
-  if(!birthStr){
-    pushConsole("[ERROR] Enter birthdate first.");
-    return true;
-  }
-
-  const [y,m,d] = birthStr.split("-").map(Number);
-  const birthUTC = Date.UTC(y,m-1,d);
-
-  renderDestinyClock(birthUTC);
-  document.getElementById("destinyClockPanel")
-    .scrollIntoView({behavior:"smooth"});
-
-  pushConsole("[DESTINY CLOCK ACTIVATED]");
-  return true;
+function renderDaily(e){
+dailyActionPanel.style.display="block";
+let d=daily(e);
+dailyPlanet.textContent=`${d.pl} — ${d.cy}`;
+dailyPct.textContent=d.rm.toFixed(2)+"%";
+dailyWhy.textContent=d.cy;
+dailyAction.textContent=d.ac;
 }
 
-/* =========================================================
-   PATCH COMMAND SYSTEM TO INCLUDE DESTINY CLOCK
-========================================================= */
-const oldRunCommand = runCommand;
-runCommand = function(cmd){
-  cmd = cmd.toLowerCase().trim();
+function renderCycles(b){
+cosmicCyclesPanel.style.display="block";
+let n=Date.now();
+cosmicCyclesTable.innerHTML=CYC.map((c,i)=>`<div class='resultCard'><b>${["Solar Rot","Solar Act","Day","Year","Precession","Galactic"][i]}</b><br>${pct(n,c.a,c.p).toFixed(4)}%</div>`).join("");
+}
 
-  if(handleDestinyClockCommand(cmd)) return;
-  oldRunCommand(cmd);
+function law(pl,s,g){
+let L=[`${pl} frames the motion.`,`Adjust without resistance.`,`Galactic drift is absolute.`,`Return before force.`,`A cycle renews duty.`,`Position beats pressure.`,`Move with season.`,`Silence sharpens.`,`Trajectory rules fate.`,`Stillness accelerates destiny.`];
+return L[Math.floor((s+g)%L.length)];
+}
+
+function destiny(b){
+destinyClockPanel.style.display="block";
+let e=eAge(b),p=pAges(e).reduce((a,c)=>a.rem<c.rem?a:c);
+destinyPlanetary.innerHTML=`${p.name} → ${p.rem.toFixed(2)}%`;
+
+let n=Date.now(),sr=pct(n,CYC[0].a,CYC[0].p),sa=pct(n,CYC[1].a,CYC[1].p),g=pct(n,CYC[5].a,CYC[5].p);
+destinySolar.innerHTML=`Rot: ${sr.toFixed(2)}%<br>Act: ${sa.toFixed(2)}%`;
+destinyGalactic.innerHTML=`${g.toFixed(6)}%`;
+
+let d=daily(e);
+destinyAlignment.innerHTML=`${d.pl} — ${d.cy}<br>${d.ac}`;
+destinyLaw.textContent=law(d.pl,sa,g);
+}
+
+function push(msg){commandConsole.innerHTML+=msg+"<br>";commandConsole.scrollTop=commandConsole.scrollHeight;}
+
+function run(cmd){
+cmd=cmd.toLowerCase().trim();
+if(cmd==="help"){push("[CMDS] planet age, solar cycles, galactic time, destiny clock");return;}
+if(cmd==="planet age"){planetaryPanel.scrollIntoView({behavior:"smooth"});push("[NAV] planetary");return;}
+if(cmd==="solar cycles"||cmd==="galactic time"){cosmicCyclesPanel.scrollIntoView({behavior:"smooth"});push("[NAV] cosmic");return;}
+if(cmd==="destiny clock"){
+let b=birthInput.value;if(!b){push("[ERR] birthdate needed");return;}
+let [y,m,d]=b.split("-").map(Number);
+destiny(Date.UTC(y,m-1,d));
+destinyClockPanel.scrollIntoView({behavior:"smooth"});
+push("[DESTINY CLOCK DEPLOYED]");
+return;}
+push("[ERR] unknown cmd");
+}
+
+calcBtn.onclick=()=>{
+let b=birthInput.value;if(!b)return alert("Enter birthdate");
+let [y,m,d]=b.split("-").map(Number),u=Date.UTC(y,m-1,d),e=eAge(u);
+earthAgeCard.style.display="block";earthAgeVal.textContent=e.toFixed(6);
+let pa=pAges(e);renderPA(pa);renderDaily(e);renderCycles(u);
 };
+
+commandInput.addEventListener("keydown",e=>{
+if(e.key==="Enter"){push("> "+e.target.value);run(e.target.value);e.target.value="";}
+});
 </script>
+</main></body></html>
